@@ -1,6 +1,6 @@
 <template>
   <h1 style="text-align: center">按需引入示例</h1>
-  <pure-table locale="zhCn" border :loading="loading" :data="tableData" :columns="columns" :pagination="pagination" />
+  <pure-table border :loading="loading" :data="tableData" :columns="columns" :pagination="pagination" />
 </template>
 
 <script lang="ts" setup>
@@ -8,36 +8,36 @@ import { ref, reactive } from "vue"
 import type { TableColumns } from "@pureadmin/table"
 
 const columns: Array<TableColumns> = [{
-  label: "Date",
+  label: "日期",
   prop: "date",
 }, {
-  label: "Name",
+  label: "姓名",
   prop: "name",
 }, {
-  label: "Address",
+  label: "地址",
   prop: "address",
 }]
 
 const tableData = [
   {
     date: '2030-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    name: '张三',
+    address: '上海市浦东新区',
   },
   {
     date: '2030-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    name: '李四',
+    address: '北京市朝阳区',
   },
   {
     date: '2030-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    name: '王五',
+    address: '深圳市南山区',
   },
   {
     date: '2030-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    name: '赵六',
+    address: '广州市天河区',
   },
 ]
 

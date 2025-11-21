@@ -4,7 +4,6 @@ import svgLoader from "vite-svg-loader";
 import terser from "@rollup/plugin-terser";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig, type UserConfig } from "vite";
-import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
 const lifecycle = process.env.npm_lifecycle_event;
 
@@ -47,12 +46,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    svgLoader(),
-    VueI18nPlugin({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [resolve(__dirname, "locales/**")]
-    })
+    svgLoader()
   ],
   // https://cn.vitejs.dev/guide/build.html#library-mode 环境变量
   define: {
