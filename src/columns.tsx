@@ -1,7 +1,6 @@
 import { dataMock } from "./mock";
-import { useI18n } from "vue-i18n";
 import { ElDivider } from "element-plus";
-import { useDark, delay } from "@pureadmin/utils";
+import { delay } from "@pureadmin/utils";
 import { type Ref, h, ref, reactive, onMounted, watch } from "vue";
 import type {
   Align,
@@ -11,10 +10,6 @@ import type {
 } from "../packages";
 
 import empty from "./svg/empty.svg?component";
-import dayIcon from "./svg/day.svg?component";
-import darkIcon from "./svg/dark.svg?component";
-import chineseIcon from "./svg/chinese.svg?component";
-import englishIcon from "./svg/english.svg?component";
 
 let srcList: Array<string> = [];
 const { BASE_URL } = import.meta.env;
@@ -24,16 +19,13 @@ for (let i = 1; i <= 11; i++) {
 }
 
 export function useColumns(tableRef: Ref) {
-  const { t, locale } = useI18n();
-
   const columns: Array<TableColumns> = [
     {
       type: "selection",
       align: "left"
     },
     {
-      // label: "Department Name",
-      headerRenderer: () => t("table.department"), // label是纯字符串非响应式，所以有前端表头国际化需求时，请使用headerRenderer渲染器
+      label: "部门名称",
       prop: "name",
       align: "left"
     },
@@ -96,7 +88,6 @@ export function useColumns(tableRef: Ref) {
     }
   ];
 
-  const { isDark, toggleDark } = useDark();
   const spacer = h(ElDivider, { direction: "vertical" });
 
   const tableHeight = ref(687);
@@ -104,7 +95,6 @@ export function useColumns(tableRef: Ref) {
   const paginationAlign = ref("right");
 
   let loading = ref(true);
-  let language = ref(true);
   let dataList = ref<any>([]);
 
   /** 分页相关配置 */
@@ -119,7 +109,7 @@ export function useColumns(tableRef: Ref) {
 
   /** 加载动画相关配置 */
   const loadingConfig = reactive<LoadingConfig>({
-    text: t("table.loading"),
+    text: "正在加载第 1 页...",
     viewBox: "-10, -10, 50, 50",
     spinner: `
         <path class="path" d="
@@ -139,7 +129,7 @@ export function useColumns(tableRef: Ref) {
 
   function onRefresh() {
     loading.value = true;
-    loadingConfig.text = t("table.loading");
+    loadingConfig.text = "正在加载第 1 页...";
     dataList.value = dataMock;
     pagination.total = dataMock.length;
     setTimeout(() => {
@@ -179,7 +169,7 @@ export function useColumns(tableRef: Ref) {
   }
 
   function pageCurrentChange(page) {
-    loadingConfig.text = `${t("table.loadingPage")} ${page} ${t("table.page")}`;
+    loadingConfig.text = `正在加载第 ${page} 页...`;
     loading.value = true;
     delay(600).then(() => {
       loading.value = false;
@@ -210,22 +200,15 @@ export function useColumns(tableRef: Ref) {
 
   return {
     empty,
-    dayIcon,
-    darkIcon,
-    chineseIcon,
-    englishIcon,
-    locale,
     spacer,
     loading,
     columns,
     dataList,
-    language,
     tableSize,
     pagination,
     tableHeight,
     loadingConfig,
     paginationAlign,
-    t,
     rowClick,
     onEmpty,
     onChange,
@@ -235,8 +218,6 @@ export function useColumns(tableRef: Ref) {
     pageSizeChange,
     getTableMethods,
     pageCurrentChange,
-    handleSelectionChange,
-    isDark,
-    toggleDark
+    handleSelectionChange
   };
 }

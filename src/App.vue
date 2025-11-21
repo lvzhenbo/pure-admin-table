@@ -5,22 +5,15 @@ const tableRef = ref();
 import { useColumns } from "./columns";
 const {
   empty,
-  dayIcon,
-  darkIcon,
-  chineseIcon,
-  englishIcon,
-  locale,
   spacer,
   loading,
   columns,
   dataList,
-  language,
   tableSize,
   pagination,
   tableHeight,
   loadingConfig,
   paginationAlign,
-  t,
   rowClick,
   onEmpty,
   onChange,
@@ -30,44 +23,22 @@ const {
   pageSizeChange,
   getTableMethods,
   pageCurrentChange,
-  handleSelectionChange,
-  isDark,
-  toggleDark
+  handleSelectionChange
 } = useColumns(tableRef);
 </script>
 
 <template>
   <el-config-provider size="small">
     <el-space class="pure-space" wrap :spacer="spacer">
-      <el-switch
-        v-model="isDark"
-        inline-prompt
-        size="default"
-        :active-icon="dayIcon"
-        :inactive-icon="darkIcon"
-        @change="toggleDark"
-      />
-      <el-switch
-        v-model="language"
-        inline-prompt
-        size="default"
-        :active-icon="chineseIcon"
-        :inactive-icon="englishIcon"
-        @change="locale = language ? 'zh' : 'en'"
-      />
-      <el-button type="primary" @click="onRefresh">
-        {{ t("button.refresh") }}
-      </el-button>
-      <el-button type="primary" @click="onEmpty">
-        {{ t("button.empty") }}
-      </el-button>
-      <el-tooltip :content="t('text.console')">
+      <el-button type="primary" @click="onRefresh">刷新表格</el-button>
+      <el-button type="primary" @click="onEmpty">空表格</el-button>
+      <el-tooltip content="请打开浏览器控制台查看打印信息">
         <el-button type="primary" @click="getTableMethods">
-          {{ t("button.methods") }}
+          获取表格组件实例
         </el-button>
       </el-tooltip>
       <div class="pure-radio">
-        <p class="pure-small">{{ t("text.size") }}</p>
+        <p class="pure-small">表格大小：</p>
         <el-radio-group v-model="tableSize">
           <el-radio-button value="large">large</el-radio-button>
           <el-radio-button value="default">default</el-radio-button>
@@ -75,7 +46,7 @@ const {
         </el-radio-group>
       </div>
       <div class="pure-radio">
-        <p class="pure-small">{{ t("text.page") }}</p>
+        <p class="pure-small">分页大小：</p>
         <el-radio-group v-model="pagination.size" @change="onChange">
           <el-radio-button value="large">large</el-radio-button>
           <el-radio-button value="default">default</el-radio-button>
@@ -83,7 +54,7 @@ const {
         </el-radio-group>
       </div>
       <div class="pure-radio">
-        <p class="pure-small">{{ t("text.align") }}</p>
+        <p class="pure-small">分页的对齐方式：</p>
         <el-radio-group v-model="paginationAlign">
           <el-radio-button value="right">right</el-radio-button>
           <el-radio-button value="center">center</el-radio-button>
@@ -121,7 +92,7 @@ const {
     @page-current-change="pageCurrentChange"
   >
     <template #empty>
-      <el-empty :description="t('text.empty')" :image-size="60">
+      <el-empty description="暂无数据" :image-size="60">
         <template #image>
           <empty />
         </template>
@@ -138,15 +109,15 @@ const {
         </el-link>
       </p>
     </template>
-    <template #operateHeader> {{ t("table.operate") }}</template>
+    <template #operateHeader>操作</template>
     <template #operation="{ row }">
       <el-button link type="primary" @click="handleUpdate(row)">
-        {{ t("button.edit") }}
+        编辑
       </el-button>
-      <el-popconfirm :title="t('text.sure')">
+      <el-popconfirm title="是否确认删除？">
         <template #reference>
           <el-button link type="primary" @click="handleDelete(row)">
-            {{ t("button.delete") }}
+            删除
           </el-button>
         </template>
       </el-popconfirm>

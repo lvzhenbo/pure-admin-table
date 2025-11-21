@@ -1,5 +1,4 @@
 import type { PropType } from "vue";
-import type { Language, DefaultLanguage } from "../../types";
 import defaultProps from "element-plus/es/components/table/src/table/defaults";
 
 // https://github.com/pure-admin/pure-admin-table/blob/main/packages/types/table-props.ts
@@ -60,10 +59,6 @@ export default {
       timeout: 60,
       zIndex: 3
     }
-  },
-  locale: {
-    type: [String, Object] as PropType<DefaultLanguage | Language>,
-    default: ""
   },
   ...defaultProps
 };
