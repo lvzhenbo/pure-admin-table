@@ -12,21 +12,14 @@ import {
 } from "vue";
 import props from "./props";
 import Renderer from "../renderer";
-import {
-  PureTableProps,
-  TableColumnScope
-} from "../../types";
+import { PureTableProps, TableColumnScope } from "../../types";
 import {
   ElTable,
   ElTableColumn,
   ElPagination,
   ElLoadingDirective
 } from "element-plus";
-import {
-  isFunction,
-  isBoolean,
-  debounce
-} from "@pureadmin/utils";
+import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
 
 export default defineComponent({
   name: "PureTable",
