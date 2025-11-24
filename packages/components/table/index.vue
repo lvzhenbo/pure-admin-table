@@ -11,7 +11,7 @@ import {
   nextTick,
   onMounted,
   onBeforeUnmount,
-  getCurrentInstance,
+  useTemplateRef,
   type CSSProperties
 } from "vue";
 import Renderer from "../renderer.vue";
@@ -34,8 +34,6 @@ type DefaultRow = Record<PropertyKey, any>;
  */
 export interface PureTableComponentProps<T extends DefaultRow = DefaultRow>
   extends TableProps<T> {
-  /** 表格唯一标识，如果单个页面有多个表格实例，但是您只获取到一个表格实例，设置 tableKey 即可解决 */
-  tableKey?: string | number;
   /** 列配置 */
   columns?: Array<TableColumns>;
   /** 整体对齐方式 */
@@ -59,7 +57,6 @@ export interface PureTableComponentProps<T extends DefaultRow = DefaultRow>
  */
 const props = withDefaults(defineProps<PureTableComponentProps>(), {
   // PureTable 自定义属性默认值
-  tableKey: "0",
   columns: () => [],
   alignWhole: "left",
   showOverflowTooltip: false,
@@ -111,7 +108,6 @@ const emit = defineEmits<{
 // 响应式数据
 const {
   columns,
-  tableKey,
   adaptive,
   pagination,
   alignWhole,
@@ -122,7 +118,8 @@ const {
 } = toRefs(props);
 
 const isClient = ref(false);
-const instance = getCurrentInstance()!;
+/** 表格实例引用 */
+const tableRef = useTemplateRef("tableRef");
 
 // 判断是否需要显示分页
 let conditions =
@@ -215,10 +212,10 @@ const getColumnBindProps = (column: any, index: number) => {
 };
 
 // 获取表格实例引用
-const getTableRef = () => instance?.proxy?.$refs[`TableRef${unref(tableKey)}`];
+const getTableRef = () => unref(tableRef);
 
 // 获取表格DOM元素
-const getTableDoms = () => (getTableRef() as any).$refs;
+const getTableDoms = () => unref(tableRef)?.$refs as Record<string, any>;
 
 // 设置自适应高度
 const setAdaptive = async () => {
@@ -293,7 +290,7 @@ defineExpose({
 <template>
   <div class="pure-table" style="width: 100%">
     <!-- 表格 -->
-    <ElTable :ref="`TableRef${tableKey}`" v-bind="{ ...props, ...$attrs }">
+    <ElTable ref="tableRef" v-bind="{ ...props, ...$attrs }">
       <!-- 动态渲染列 -->
       <template v-for="(column, index) in columns" :key="index">
         <ElTableColumn
