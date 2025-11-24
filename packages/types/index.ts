@@ -10,7 +10,6 @@ import {
   TableColumn
 } from "./table-column";
 import { TableProps, PureTableProps, AdaptiveConfig } from "./table-props";
-import { LoadingConfig } from "./loading-config";
 import { PaginationProps } from "./pagination";
 
 type Size = "large" | "default" | "small";
@@ -29,7 +28,6 @@ export type {
   PaginationProps,
   PureTableProps,
   AdaptiveConfig,
-  LoadingConfig,
   TableColumns,
   TableColumn,
   TableProps,

@@ -1,10 +1,10 @@
 <template>
   <h1 style="text-align: center">按需引入示例</h1>
-  <pure-table border :loading="loading" :data="tableData" :columns="columns" :pagination="pagination" />
+  <pure-table border :data="tableData" :columns="columns" :pagination="pagination" />
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue"
+import { reactive } from "vue"
 import type { TableColumns } from "@pureadmin/table"
 
 const columns: Array<TableColumns> = [{
@@ -41,16 +41,11 @@ const tableData = [
   },
 ]
 
-let loading = ref(true)
 const pagination = reactive({
   pageSize: 5,
   currentPage: 1,
   background: true,
   total: tableData.length
 })
-
-setTimeout(() => {
-  loading.value = false
-}, 1500)
 </script>
 

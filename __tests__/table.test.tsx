@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, test, vi } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import { nextTick, type VNode, reactive, ref } from "vue";
 import { PureTable, type PaginationProps } from "../packages";
 
@@ -45,26 +45,6 @@ describe("PureTable", () => {
     ));
     await nextTick();
     expect(wrapper.find(".empty").exists()).toEqual(true);
-    wrapper.unmount();
-  });
-
-  test("table `loading` prop", async () => {
-    const loading = ref(true);
-    const wrapper = _mount(() => <PureTable loading={loading.value} />);
-
-    await nextTick();
-
-    const maskWrapper = wrapper.find(".el-loading-mask");
-    expect(maskWrapper.exists()).toBeTruthy();
-
-    vi.useFakeTimers();
-    loading.value = false;
-    await nextTick();
-
-    vi.runAllTimers();
-    vi.useRealTimers();
-    await nextTick();
-    expect(wrapper.find(".el-loading-mask").exists()).toBeFalsy();
     wrapper.unmount();
   });
 
