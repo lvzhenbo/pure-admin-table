@@ -6,13 +6,11 @@ import { useColumns } from "./columns";
 const {
   empty,
   spacer,
-  loading,
   columns,
   dataList,
   tableSize,
   pagination,
   tableHeight,
-  loadingConfig,
   paginationAlign,
   rowClick,
   onEmpty,
@@ -66,8 +64,6 @@ const {
 
   <PureTable
     ref="tableRef"
-    :loading="loading"
-    :loadingConfig="loadingConfig"
     :size="tableSize as any"
     :height="tableHeight"
     border

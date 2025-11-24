@@ -1,11 +1,9 @@
 import { dataMock } from "./mock";
 import { ElDivider } from "element-plus";
-import { delay } from "@pureadmin/utils";
 import { type Ref, h, ref, reactive, onMounted, watch } from "vue";
 import type {
   Align,
   TableColumns,
-  LoadingConfig,
   PaginationProps
 } from "../packages";
 
@@ -94,7 +92,6 @@ export function useColumns(tableRef: Ref) {
   const tableSize = ref("default");
   const paginationAlign = ref("right");
 
-  let loading = ref(true);
   let dataList = ref<any>([]);
 
   /** 分页相关配置 */
@@ -107,34 +104,13 @@ export function useColumns(tableRef: Ref) {
     total: dataList.value.length
   });
 
-  /** 加载动画相关配置 */
-  const loadingConfig = reactive<LoadingConfig>({
-    text: "正在加载第 1 页...",
-    viewBox: "-10, -10, 50, 50",
-    spinner: `
-        <path class="path" d="
-          M 30 15
-          L 28 17
-          M 25.61 25.61
-          A 15 15, 0, 0, 1, 15 30
-          A 15 15, 0, 1, 1, 27.99 7.5
-          L 15 15
-        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
-      `
-  });
-
   function onChange(val) {
     pagination.size = val;
   }
 
   function onRefresh() {
-    loading.value = true;
-    loadingConfig.text = "正在加载第 1 页...";
     dataList.value = dataMock;
     pagination.total = dataMock.length;
-    setTimeout(() => {
-      loading.value = false;
-    }, 800);
   }
 
   function onEmpty() {
@@ -169,11 +145,7 @@ export function useColumns(tableRef: Ref) {
   }
 
   function pageCurrentChange(page) {
-    loadingConfig.text = `正在加载第 ${page} 页...`;
-    loading.value = true;
-    delay(600).then(() => {
-      loading.value = false;
-    });
+    console.log("pageCurrentChange", page);
   }
 
   watch(paginationAlign, (align: Align) => {
@@ -201,13 +173,11 @@ export function useColumns(tableRef: Ref) {
   return {
     empty,
     spacer,
-    loading,
     columns,
     dataList,
     tableSize,
     pagination,
     tableHeight,
-    loadingConfig,
     paginationAlign,
     rowClick,
     onEmpty,

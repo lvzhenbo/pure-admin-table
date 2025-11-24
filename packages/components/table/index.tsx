@@ -16,28 +16,22 @@ import { PureTableProps, TableColumnScope } from "../../types";
 import {
   ElTable,
   ElTableColumn,
-  ElPagination,
-  ElLoadingDirective
+  ElPagination
 } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
 
 export default defineComponent({
   name: "PureTable",
   props,
-  directives: {
-    Loading: ElLoadingDirective
-  },
   emits: ["page-size-change", "page-current-change"],
   setup(props, { slots, attrs, emit, expose }) {
     const {
       columns,
-      loading,
       tableKey,
       adaptive,
       pagination,
       alignWhole,
       headerAlign,
-      loadingConfig,
       adaptiveConfig,
       rowHoverBgColor,
       showOverflowTooltip
@@ -49,26 +43,6 @@ export default defineComponent({
       unref(pagination) &&
       unref(pagination).currentPage &&
       unref(pagination).pageSize;
-
-    let convertLoadingConfig = computed(() => {
-      if (!unref(loadingConfig)) return;
-      let { text, spinner, svg, viewBox } = unref(loadingConfig);
-      return {
-        "element-loading-text": text,
-        "element-loading-spinner": spinner,
-        "element-loading-svg": svg,
-        "element-loading-svg-view-box": viewBox
-      };
-    });
-
-    const loadingBackground = computed(() => {
-      if (!unref(loading)) return;
-      return {
-        "element-loading-background": unref(loadingConfig)?.background
-          ? unref(loadingConfig)?.background
-          : "rgba(255, 255, 255, 0.45)"
-      };
-    });
 
     const getStyle = computed((): CSSProperties => {
       return Object.assign(
@@ -323,13 +297,7 @@ export default defineComponent({
 
     let renderPureTable = () => {
       return (
-        <div
-          class="pure-table"
-          style="width:100%"
-          v-loading={unref(loading)}
-          {...unref(loadingBackground)}
-          {...unref(convertLoadingConfig)}
-        >
+        <div class="pure-table" style="width:100%">
           {renderTable()}
         </div>
       );

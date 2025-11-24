@@ -11,14 +11,6 @@ export default {
     type: Array,
     default: []
   },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  loadingConfig: {
-    type: Object,
-    default: () => {}
-  },
   alignWhole: {
     type: String,
     default: "left"
