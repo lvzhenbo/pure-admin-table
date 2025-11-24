@@ -15,77 +15,100 @@ import {
   type CSSProperties
 } from "vue";
 import Renderer from "../renderer.vue";
-import { PureTableProps, TableColumnScope } from "../../types";
+import {
+  type PureTableProps,
+  type TableColumnScope,
+  type TableColumns,
+  type PaginationProps,
+  type AdaptiveConfig,
+  type Align
+} from "../../types";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
-import type { PropType } from "vue";
-import defaultProps from "element-plus/es/components/table/src/table/defaults";
+import type {
+  TableProps,
+  SummaryMethod,
+  ColumnStyle,
+  ColumnCls,
+  CellStyle,
+  CellCls,
+  Sort,
+  TreeNode
+} from "element-plus";
+import type { TableOverflowTooltipOptions } from "element-plus/es/components/table/src/util";
 
-// 定义属性
-const props = defineProps({
-  /** 表格唯一标识 */
-  tableKey: {
-    type: [String, Number] as PropType<string | number>,
-    default: "0"
-  },
+/**
+ * @description 定义组件的 props 接口，继承 Element Plus Table 的 props 类型
+ */
+export interface PureTableComponentProps
+  extends /* @vue-ignore */ Partial<TableProps<any>> {
+  /** 表格唯一标识，如果单个页面有多个表格实例，但是您只获取到一个表格实例，设置 tableKey 即可解决 */
+  tableKey?: string | number;
   /** 列配置 */
-  columns: {
-    type: Array as PropType<any[]>,
-    default: () => []
-  },
+  columns?: Array<TableColumns>;
   /** 整体对齐方式 */
-  alignWhole: {
-    type: String,
-    default: "left"
-  },
-  /** 表头对齐方式 */
-  headerAlign: {
-    type: String,
-    default: ""
-  },
-  /** 是否显示溢出提示 */
-  showOverflowTooltip: {
-    type: Boolean,
-    default: false
-  },
-  /** 行悬停背景色 */
-  rowHoverBgColor: {
-    type: String,
-    default: ""
-  },
-  /** 分页配置 */
-  pagination: {
-    type: Object,
-    default: () => ({
-      total: 0,
-      pageSize: 5,
-      align: "right",
-      size: "default",
-      background: false,
-      pageSizes: [5, 10, 15, 20],
-      layout: "total, sizes, prev, pager, next, jumper"
-    })
-  },
-  /** 是否自适应高度 */
-  adaptive: {
-    type: Boolean,
-    default: false
-  },
-  /** 自适应配置 */
-  adaptiveConfig: {
-    type: Object,
-    default: () => ({
-      offsetBottom: 96,
-      fixHeader: true,
-      timeout: 60,
-      zIndex: 3
-    })
-  },
-  // 继承 Element Plus Table 的所有属性
-  ...defaultProps
+  alignWhole?: Align;
+  /** 表头对齐方式，若不设置该项，则使用表格的对齐方式 */
+  headerAlign?: Align;
+  /** 当内容过长被隐藏时显示 tooltip */
+  showOverflowTooltip?: boolean;
+  /** 鼠标经过行时，行的背景色 */
+  rowHoverBgColor?: string;
+  /** 分页相关配置 */
+  pagination?: Partial<PaginationProps>;
+  /** 表格是否撑满内容区自适应高度 */
+  adaptive?: boolean;
+  /** 撑满内容区自适应高度相关配置 */
+  adaptiveConfig?: AdaptiveConfig;
+}
+
+/**
+ * @description 使用 withDefaults 为 props 添加默认值，包含所有 Element Plus Table 的默认值
+ */
+const props = withDefaults(defineProps<PureTableComponentProps>(), {
+  // PureTable 自定义属性默认值
+  tableKey: "0",
+  columns: () => [],
+  alignWhole: "left",
+  showOverflowTooltip: false,
+  rowHoverBgColor: "",
+  adaptive: false,
+  adaptiveConfig: () => ({
+    offsetBottom: 96,
+    fixHeader: true,
+    timeout: 60,
+    zIndex: 3
+  }),
+  // Element Plus Table 的默认值
+  data: () => [],
+  fit: true,
+  stripe: false,
+  border: false,
+  showHeader: true,
+  highlightCurrentRow: false,
+  defaultExpandAll: false,
+  selectOnIndeterminate: true,
+  indent: 16,
+  treeProps: () => ({
+    hasChildren: "hasChildren",
+    children: "children",
+    checkStrictly: false
+  }),
+  lazy: false,
+  style: () => ({}),
+  className: "",
+  tableLayout: "fixed",
+  scrollbarAlwaysOn: false,
+  flexible: false,
+  allowDragLastColumn: true,
+  preserveExpandedContent: false,
+  showSummary: false,
+  nativeScrollbar: false
 });
 
-// 定义事件
+/**
+ * @description 定义组件的 emits 事件
+ */
 const emit = defineEmits<{
   /** 分页大小改变事件 */
   "page-size-change": [value: number];
@@ -104,7 +127,7 @@ const {
   adaptiveConfig,
   rowHoverBgColor,
   showOverflowTooltip
-} = toRefs(props) as unknown as PureTableProps;
+} = toRefs(props);
 
 const isClient = ref(false);
 const instance = getCurrentInstance()!;
@@ -112,11 +135,12 @@ const instance = getCurrentInstance()!;
 // 判断是否需要显示分页
 let conditions =
   unref(pagination) &&
-  unref(pagination).currentPage &&
-  unref(pagination).pageSize;
+  unref(pagination)?.currentPage &&
+  unref(pagination)?.pageSize;
 
 // 分页样式
 const getStyle = computed((): CSSProperties => {
+  const paginationValue = unref(pagination);
   return Object.assign(
     {
       width: "100%",
@@ -124,25 +148,31 @@ const getStyle = computed((): CSSProperties => {
       display: "flex",
       flexWrap: "wrap",
       justifyContent:
-        unref(pagination).align === "left"
+        paginationValue?.align === "left"
           ? "flex-start"
-          : unref(pagination).align === "center"
+          : paginationValue?.align === "center"
             ? "center"
             : "flex-end"
     },
-    unref(pagination).style ?? {}
+    paginationValue?.style ?? {}
   );
 });
 
 // 分页大小改变处理
 const handleSizeChange = (val: number) => {
-  unref(pagination).pageSize = val;
+  const paginationValue = unref(pagination);
+  if (paginationValue) {
+    paginationValue.pageSize = val;
+  }
   emit("page-size-change", val);
 };
 
 // 当前页改变处理
 const handleCurrentChange = (val: number) => {
-  unref(pagination).currentPage = val;
+  const paginationValue = unref(pagination);
+  if (paginationValue) {
+    paginationValue.currentPage = val;
+  }
   emit("page-current-change", val);
 };
 
