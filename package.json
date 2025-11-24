@@ -1,7 +1,7 @@
 {
   "name": "@pureadmin/table",
   "version": "3.3.0",
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
   "description": "二次封装element-plus的Table，提供灵活的配置项",
   "keywords": [
     "@pureadmin/table",
@@ -58,7 +58,7 @@
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "lint:pretty": "pretty-quick --staged",
     "pub": "pub lib",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "peerDependencies": {
     "element-plus": "^2.0.0"
@@ -68,29 +68,27 @@
     "vue": "^3.5.24"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.4.3",
-    "@commitlint/config-conventional": "^18.4.3",
-    "@commitlint/types": "^18.4.3",
-    "@pureadmin/release": "^1.1.0",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@commitlint/types": "^20.0.0",
     "@pureadmin/utils": "^2.6.2",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@types/node": "^22.12.0",
+    "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vitejs/plugin-vue-jsx": "^5.1.2",
-    "@vue/test-utils": "^2.4.3",
-    "husky": "^8.0.3",
-    "jsdom": "^23.0.1",
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.1.1",
+    "@vue/test-utils": "^2.4.6",
+    "husky": "^9.1.7",
+    "jsdom": "^27.2.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.6.2",
     "resize-observer-polyfill": "^1.5.1",
-    "rollup": "^4.3.0",
-    "sass": "^1.89.2",
-    "sass-loader": "^16.0.5",
-    "typescript": "^5.3.3",
+    "rollup": "^4.53.3",
+    "sass": "^1.94.2",
+    "sass-loader": "^16.0.6",
+    "typescript": "^5.9.3",
     "vite": "^7.2.4",
     "vite-svg-loader": "^5.1.0",
-    "vitest": "^4.0.12",
-    "vue-tsc": "^1.8.27"
+    "vitest": "^4.0.13",
+    "vue-tsc": "^3.1.5"
   },
   "pnpm": {
     "peerDependencyRules": {

@@ -1,7 +1,6 @@
 import { resolve } from "node:path";
 import vue from "@vitejs/plugin-vue";
 import svgLoader from "vite-svg-loader";
-import terser from "@rollup/plugin-terser";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig, type UserConfig } from "vite";
 
@@ -27,8 +26,7 @@ function getConfigs(): UserConfig {
                 "element-plus": "ElementPlus"
               },
               exports: "named"
-            },
-            plugins: [terser({ compress: { drop_console: true } })]
+            }
           }
         }
       }
@@ -43,11 +41,7 @@ function getConfigs(): UserConfig {
 
 // https://cn.vitejs.dev/guide/build.html#library-mode
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-    svgLoader()
-  ],
+  plugins: [vue(), vueJsx(), svgLoader()],
   // https://cn.vitejs.dev/guide/build.html#library-mode 环境变量
   define: {
     "process.env.NODE_ENV": '"production"',
