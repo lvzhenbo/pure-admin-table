@@ -1,6 +1,7 @@
 import { resolve } from "node:path";
 import vue from "@vitejs/plugin-vue";
 import svgLoader from "vite-svg-loader";
+import vueJsx from "@vitejs/plugin-vue-jsx";
 import { defineConfig, type UserConfig } from "vite";
 
 const lifecycle = process.env.npm_lifecycle_event;
@@ -36,7 +37,7 @@ function getConfigs(): UserConfig {
 
 // https://cn.vitejs.dev/guide/build.html#library-mode
 export default defineConfig({
-  plugins: [vue(), svgLoader()],
+  plugins: [vue(), vueJsx(), svgLoader()],
   // https://cn.vitejs.dev/guide/build.html#library-mode 环境变量
   define: {
     "process.env.NODE_ENV": '"production"',

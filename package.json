@@ -10,7 +10,8 @@
     "el-table",
     "nuxt3",
     "vue3",
-    "vite"
+    "vite",
+    "tsx"
   ],
   "homepage": "https://github.com/pure-admin/pure-admin-table/tree/main/#readme",
   "bugs": {
@@ -51,7 +52,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lib": "vite build && vue-tsc -p tsconfig.build.json",
-    "lint": "prettier --write  \"packages/**/*.{ts,vue}\" \"__tests__/table.test.ts\" \"src/*.{ts,vue}\"",
+    "lint": "prettier --write  \"packages/**/*.{ts,tsx,vue}\" \"__tests__/table.test.tsx\" \"src/*.{ts,tsx,vue}\"",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.mjs",
     "lint:pretty": "pretty-quick --staged",
     "pub": "pub lib",
@@ -71,6 +72,7 @@
     "@pureadmin/utils": "^2.6.2",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
+    "@vitejs/plugin-vue-jsx": "^5.1.2",
     "@vue/test-utils": "^2.4.6",
     "husky": "^9.1.7",
     "jsdom": "^27.2.0",
