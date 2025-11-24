@@ -1,11 +1,7 @@
 import { dataMock } from "./mock";
 import { ElDivider } from "element-plus";
 import { type Ref, h, ref, reactive, onMounted, watch } from "vue";
-import type {
-  Align,
-  TableColumns,
-  PaginationProps
-} from "../packages";
+import type { Align, TableColumns, PaginationProps } from "../packages";
 
 import empty from "./svg/empty.svg?component";
 

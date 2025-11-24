@@ -13,11 +13,7 @@ import {
 import props from "./props";
 import Renderer from "../renderer";
 import { PureTableProps, TableColumnScope } from "../../types";
-import {
-  ElTable,
-  ElTableColumn,
-  ElPagination
-} from "element-plus";
+import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
 
 export default defineComponent({
