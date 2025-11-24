@@ -25,17 +25,7 @@ import {
 } from "../../types";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
-import type {
-  TableProps,
-  SummaryMethod,
-  ColumnStyle,
-  ColumnCls,
-  CellStyle,
-  CellCls,
-  Sort,
-  TreeNode
-} from "element-plus";
-import type { TableOverflowTooltipOptions } from "element-plus/es/components/table/src/util";
+import type { TableProps } from "element-plus";
 
 type DefaultRow = Record<PropertyKey, any>;
 
