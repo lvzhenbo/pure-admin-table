@@ -2,10 +2,9 @@
 
 import { defineConfig } from "vitest/config";
 import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
 
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  plugins: [vue()],
   optimizeDeps: {
     disabled: true
   },
@@ -16,6 +15,6 @@ export default defineConfig({
     clearMocks: true,
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
-    include: ["__tests__/*.test.{js,ts,tsx}"]
+    include: ["__tests__/*.test.{js,ts}"]
   }
 });

@@ -42,7 +42,8 @@ type DefaultRow = Record<PropertyKey, any>;
 /**
  * @description 定义组件的 props 接口，继承 Element Plus Table 的 props 类型
  */
-export interface PureTableComponentProps<T extends DefaultRow = DefaultRow> extends TableProps<T> {
+export interface PureTableComponentProps<T extends DefaultRow = DefaultRow>
+  extends TableProps<T> {
   /** 表格唯一标识，如果单个页面有多个表格实例，但是您只获取到一个表格实例，设置 tableKey 即可解决 */
   tableKey?: string | number;
   /** 列配置 */

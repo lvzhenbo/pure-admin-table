@@ -1,5 +1,5 @@
 import { dataMock } from "./mock";
-import { ElDivider } from "element-plus";
+import { ElDivider, ElTag, ElImage } from "element-plus";
 import { type Ref, h, ref, reactive, onMounted, watch } from "vue";
 import type { Align, TableColumns, PaginationProps } from "../packages";
 
@@ -38,21 +38,22 @@ export function useColumns(tableRef: Ref) {
             {
               label: "Status",
               prop: "status",
-              cellRenderer: ({ row, props }) => (
-                <el-tag
-                  size={props.size}
-                  type={row.status === 1 ? "danger" : "success"}
-                  effect="plain"
-                >
-                  {row.status === 0 ? "关闭" : "开启"}
-                </el-tag>
-              )
+              cellRenderer: ({ row, props }) =>
+                h(
+                  ElTag,
+                  {
+                    size: props.size,
+                    type: row.status === 1 ? "danger" : "success",
+                    effect: "plain"
+                  },
+                  () => (row.status === 0 ? "关闭" : "开启")
+                )
             }
           ]
         },
         {
           prop: "createTime",
-          headerRenderer: () => <p>headerRenderer 😉</p>,
+          headerRenderer: () => h("p", null, "headerRenderer 😉"),
           cellRenderer: ({
             index,
             props: {
@@ -60,17 +61,15 @@ export function useColumns(tableRef: Ref) {
             }
           }) => {
             let currentIndex = (currentPage - 1) * pageSize + index;
-            return (
-              <el-image
-                fit="cover"
-                loading="lazy"
-                preview-teleported={true}
-                initial-index={currentIndex}
-                src={srcList[currentIndex]}
-                preview-src-list={srcList}
-                style="width: 80px; height: 80px; border-radius: 6px"
-              />
-            );
+            return h(ElImage, {
+              fit: "cover",
+              loading: "lazy",
+              previewTeleported: true,
+              initialIndex: currentIndex,
+              src: srcList[currentIndex],
+              previewSrcList: srcList,
+              style: "width: 80px; height: 80px; border-radius: 6px"
+            });
           }
         }
       ]

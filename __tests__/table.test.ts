@@ -1,13 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, test } from "vitest";
-import { nextTick, type VNode, reactive, ref } from "vue";
+import { nextTick, reactive, ref, h } from "vue";
 import { PureTable, type PaginationProps } from "../packages";
-
-const _mount = (render: () => VNode) => {
-  return mount(render, {
-    attachTo: document.body
-  });
-};
 
 describe("PureTable", () => {
   const columns = [
@@ -19,30 +13,39 @@ describe("PureTable", () => {
   const dataList = [{ name: "Tom" }];
 
   it("should work with import on demand", () => {
-    _mount(() => <PureTable />);
+    const wrapper = mount(PureTable, {
+      attachTo: document.body
+    });
+    wrapper.unmount();
   });
 
   test("table `append` slot", async () => {
-    const wrapper = _mount(() => (
-      <PureTable columns={columns} data={[]}>
-        {{
-          append: () => <p class="append">Append</p>
-        }}
-      </PureTable>
-    ));
+    const wrapper = mount(PureTable, {
+      props: {
+        columns,
+        data: []
+      },
+      slots: {
+        append: () => h("p", { class: "append" }, "Append")
+      },
+      attachTo: document.body
+    });
     await nextTick();
     expect(wrapper.find(".append").text()).toEqual("Append");
     wrapper.unmount();
   });
 
   test("table `empty` slot", async () => {
-    const wrapper = _mount(() => (
-      <PureTable columns={columns} data={[]}>
-        {{
-          empty: () => <div class="empty">Empty</div>
-        }}
-      </PureTable>
-    ));
+    const wrapper = mount(PureTable, {
+      props: {
+        columns,
+        data: []
+      },
+      slots: {
+        empty: () => h("div", { class: "empty" }, "Empty")
+      },
+      attachTo: document.body
+    });
     await nextTick();
     expect(wrapper.find(".empty").exists()).toEqual(true);
     wrapper.unmount();
@@ -56,9 +59,14 @@ describe("PureTable", () => {
       class: "testClassName",
       total: 1
     });
-    const wrapper = _mount(() => (
-      <PureTable columns={columns} data={dataList} pagination={pagination} />
-    ));
+    const wrapper = mount(PureTable, {
+      props: {
+        columns,
+        data: dataList,
+        pagination
+      },
+      attachTo: document.body
+    });
     await nextTick();
     expect(wrapper.find(".testClassName").exists()).toEqual(true);
     wrapper.unmount();
@@ -66,10 +74,15 @@ describe("PureTable", () => {
 
   test("table `getTableRef` methods", async () => {
     const tableRef = ref();
-    const wrapper = _mount(() => (
-      <PureTable ref={tableRef} columns={columns} data={dataList} />
-    ));
+    const wrapper = mount(PureTable, {
+      props: {
+        columns,
+        data: dataList
+      },
+      attachTo: document.body
+    });
     await nextTick();
+    tableRef.value = wrapper.vm;
     expect(tableRef.value.getTableRef()).toBeDefined();
     wrapper.unmount();
   });
