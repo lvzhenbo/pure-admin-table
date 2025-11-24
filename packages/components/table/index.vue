@@ -30,7 +30,7 @@ const props = defineProps({
   },
   /** 列配置 */
   columns: {
-    type: Array,
+    type: Array as PropType<any[]>,
     default: () => []
   },
   /** 整体对齐方式 */
@@ -108,7 +108,6 @@ const {
 
 const isClient = ref(false);
 const instance = getCurrentInstance()!;
-const tableRef = ref();
 
 // 判断是否需要显示分页
 let conditions =
@@ -279,11 +278,8 @@ defineExpose({
           v-if="!isColumnHidden(column.hide, $attrs)"
           v-bind="getColumnBindProps(column, index)"
         >
-          <!-- 默认插槽 -->
-          <template
-            v-if="column.cellRenderer || column.slot || column.children"
-            #default="scope"
-          >
+          <!-- 默认插槽：单元格渲染器或插槽 -->
+          <template v-if="column.cellRenderer || column.slot" #default="scope">
             <!-- 单元格渲染器 -->
             <Renderer
               v-if="column.cellRenderer"
@@ -306,67 +302,68 @@ defineExpose({
                 attrs: $attrs
               }"
             />
-            <!-- 子列 -->
-            <template v-else-if="column.children && column.children.length > 0">
-              <ElTableColumn
-                v-for="(child, childIndex) in column.children"
-                :key="childIndex"
-                v-bind="getColumnBindProps(child, childIndex)"
+          </template>
+
+          <!-- 嵌套子列 -->
+          <template v-if="column.children && column.children.length > 0">
+            <ElTableColumn
+              v-for="(child, childIndex) in column.children"
+              :key="childIndex"
+              v-bind="getColumnBindProps(child, childIndex)"
+            >
+              <!-- 子列默认插槽 -->
+              <template
+                v-if="child.cellRenderer || child.slot"
+                #default="childScope"
               >
-                <!-- 子列默认插槽 -->
-                <template
-                  v-if="child.cellRenderer || child.slot"
-                  #default="childScope"
-                >
-                  <Renderer
-                    v-if="child.cellRenderer"
-                    :render="child.cellRenderer"
-                    :params="{
-                      ...childScope,
-                      index: childScope.$index,
-                      props,
-                      attrs: $attrs
-                    }"
-                  />
-                  <slot
-                    v-else-if="child.slot"
-                    :name="child.slot"
-                    v-bind="{
-                      ...childScope,
-                      index: childScope.$index,
-                      props,
-                      attrs: $attrs
-                    }"
-                  />
-                </template>
-                <!-- 子列表头插槽 -->
-                <template
-                  v-if="child.headerRenderer || child.headerSlot"
-                  #header="childScope"
-                >
-                  <Renderer
-                    v-if="child.headerRenderer"
-                    :render="child.headerRenderer"
-                    :params="{
-                      ...childScope,
-                      index: childScope.$index,
-                      props,
-                      attrs: $attrs
-                    }"
-                  />
-                  <slot
-                    v-else-if="child.headerSlot"
-                    :name="child.headerSlot"
-                    v-bind="{
-                      ...childScope,
-                      index: childScope.$index,
-                      props,
-                      attrs: $attrs
-                    }"
-                  />
-                </template>
-              </ElTableColumn>
-            </template>
+                <Renderer
+                  v-if="child.cellRenderer"
+                  :render="child.cellRenderer"
+                  :params="{
+                    ...childScope,
+                    index: childScope.$index,
+                    props,
+                    attrs: $attrs
+                  }"
+                />
+                <slot
+                  v-else-if="child.slot"
+                  :name="child.slot"
+                  v-bind="{
+                    ...childScope,
+                    index: childScope.$index,
+                    props,
+                    attrs: $attrs
+                  }"
+                />
+              </template>
+              <!-- 子列表头插槽 -->
+              <template
+                v-if="child.headerRenderer || child.headerSlot"
+                #header="childScope"
+              >
+                <Renderer
+                  v-if="child.headerRenderer"
+                  :render="child.headerRenderer"
+                  :params="{
+                    ...childScope,
+                    index: childScope.$index,
+                    props,
+                    attrs: $attrs
+                  }"
+                />
+                <slot
+                  v-else-if="child.headerSlot"
+                  :name="child.headerSlot"
+                  v-bind="{
+                    ...childScope,
+                    index: childScope.$index,
+                    props,
+                    attrs: $attrs
+                  }"
+                />
+              </template>
+            </ElTableColumn>
           </template>
 
           <!-- 表头插槽 -->
