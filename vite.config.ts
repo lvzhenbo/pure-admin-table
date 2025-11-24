@@ -13,18 +13,14 @@ function getConfigs(): UserConfig {
         build: {
           lib: {
             entry: resolve(__dirname, "packages/index.ts"),
-            name: "PureTable",
-            fileName: format => `index.${format}.js`
+            formats: ["es"],
+            fileName: () => "index.js"
           },
           // https://rollupjs.org/guide/en/#big-list-of-options
           rollupOptions: {
             treeshake: true,
             external: ["vue", "element-plus"],
             output: {
-              globals: {
-                vue: "Vue",
-                "element-plus": "ElementPlus"
-              },
               exports: "named"
             }
           }

@@ -26,16 +26,14 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "dist/index.umd.js",
-  "module": "dist/index.es.js",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "jsdelivr": "dist/index.umd.js",
-  "unpkg": "dist/index.umd.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
+      "import": "./dist/index.js"
     },
     "./volar": {
       "types": "./volar.d.ts"
