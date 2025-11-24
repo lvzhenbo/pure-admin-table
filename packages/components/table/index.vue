@@ -69,10 +69,8 @@ const props = withDefaults(defineProps<PureTableComponentProps>(), {
   tableKey: "0",
   columns: () => [],
   alignWhole: "left",
-  headerAlign: undefined,
   showOverflowTooltip: false,
   rowHoverBgColor: "",
-  pagination: undefined,
   adaptive: false,
   adaptiveConfig: () => ({
     offsetBottom: 96,
@@ -101,7 +99,6 @@ const props = withDefaults(defineProps<PureTableComponentProps>(), {
   tableLayout: "fixed",
   scrollbarAlwaysOn: false,
   flexible: false,
-  scrollbarTabindex: undefined,
   allowDragLastColumn: true,
   preserveExpandedContent: false,
   showSummary: false,
