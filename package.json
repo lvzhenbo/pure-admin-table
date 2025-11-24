@@ -53,7 +53,7 @@
     "preview": "vite preview",
     "lib": "vite build && vue-tsc -p tsconfig.build.json",
     "lint": "prettier --write  \"packages/**/*.{ts,tsx,vue}\" \"__tests__/table.test.tsx\" \"src/*.{ts,tsx,vue}\"",
-    "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
+    "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.mjs",
     "lint:pretty": "pretty-quick --staged",
     "pub": "pub lib",
     "prepare": "husky"
