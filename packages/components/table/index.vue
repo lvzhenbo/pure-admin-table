@@ -5,8 +5,6 @@
  */
 import {
   ref,
-  unref,
-  toRefs,
   computed,
   nextTick,
   onMounted,
@@ -54,6 +52,7 @@ export interface PureTableComponentProps<T extends DefaultRow = DefaultRow>
 
 /**
  * @description 使用 withDefaults 为 props 添加默认值，包含所有 Element Plus Table 的默认值
+ * Vue 3.5+ 支持响应式解构
  */
 const props = withDefaults(defineProps<PureTableComponentProps>(), {
   // PureTable 自定义属性默认值
@@ -95,6 +94,17 @@ const props = withDefaults(defineProps<PureTableComponentProps>(), {
   nativeScrollbar: false
 });
 
+const {
+  columns,
+  adaptive,
+  pagination,
+  alignWhole,
+  headerAlign,
+  adaptiveConfig,
+  rowHoverBgColor,
+  showOverflowTooltip
+} = props;
+
 /**
  * @description 定义组件的 emits 事件
  */
@@ -105,62 +115,42 @@ const emit = defineEmits<{
   "page-current-change": [value: number];
 }>();
 
-// 响应式数据
-const {
-  columns,
-  adaptive,
-  pagination,
-  alignWhole,
-  headerAlign,
-  adaptiveConfig,
-  rowHoverBgColor,
-  showOverflowTooltip
-} = toRefs(props);
-
 const isClient = ref(false);
 /** 表格实例引用 */
 const tableRef = useTemplateRef("tableRef");
 
 // 判断是否需要显示分页
-let conditions =
-  unref(pagination) &&
-  unref(pagination)?.currentPage &&
-  unref(pagination)?.pageSize;
+const conditions = computed(
+  () => pagination && pagination?.currentPage && pagination?.pageSize
+);
 
 // 分页样式
 const getStyle = computed((): CSSProperties => {
-  const paginationValue = unref(pagination);
   return Object.assign(
     {
-      width: "100%",
-      margin: "16px 0",
-      display: "flex",
-      flexWrap: "wrap",
       justifyContent:
-        paginationValue?.align === "left"
+        pagination?.align === "left"
           ? "flex-start"
-          : paginationValue?.align === "center"
+          : pagination?.align === "center"
             ? "center"
             : "flex-end"
     },
-    paginationValue?.style ?? {}
+    pagination?.style ?? {}
   );
 });
 
 // 分页大小改变处理
 const handleSizeChange = (val: number) => {
-  const paginationValue = unref(pagination);
-  if (paginationValue) {
-    paginationValue.pageSize = val;
+  if (pagination) {
+    pagination.pageSize = val;
   }
   emit("page-size-change", val);
 };
 
 // 当前页改变处理
 const handleCurrentChange = (val: number) => {
-  const paginationValue = unref(pagination);
-  if (paginationValue) {
-    paginationValue.currentPage = val;
+  if (pagination) {
+    pagination.currentPage = val;
   }
   emit("page-current-change", val);
 };
@@ -202,26 +192,26 @@ const getColumnBindProps = (column: any, index: number) => {
   return {
     ...rest,
     prop: getColumnProp(prop, index),
-    align: align || unref(alignWhole),
-    headerAlign: headerAlign || unref(headerAlign),
+    align: align || alignWhole,
+    headerAlign: headerAlign || props.headerAlign,
     showOverflowTooltip:
       showOverflowTooltip !== undefined
         ? showOverflowTooltip
-        : unref(showOverflowTooltip)
+        : props.showOverflowTooltip
   };
 };
 
 // 获取表格实例引用
-const getTableRef = () => unref(tableRef);
+const getTableRef = () => tableRef.value;
 
 // 获取表格DOM元素
-const getTableDoms = () => unref(tableRef)?.$refs as Record<string, any>;
+const getTableDoms = () => tableRef.value?.$refs as Record<string, any>;
 
 // 设置自适应高度
 const setAdaptive = async () => {
   await nextTick();
   const tableWrapper = getTableDoms().tableWrapper;
-  const offsetBottom = unref(adaptiveConfig).offsetBottom ?? 96;
+  const offsetBottom = adaptiveConfig.offsetBottom ?? 96;
   tableWrapper.style.height = `${
     window.innerHeight - tableWrapper.getBoundingClientRect().top - offsetBottom
   }px`;
@@ -230,7 +220,7 @@ const setAdaptive = async () => {
 // 防抖设置自适应
 const debounceSetAdaptive = debounce(
   setAdaptive,
-  unref(adaptiveConfig).timeout ?? 60
+  adaptiveConfig.timeout ?? 60
 );
 
 // 设置表头固定
@@ -246,22 +236,22 @@ const setHeaderSticky = async (zIndex = 3) => {
 onMounted(() => {
   isClient.value = true;
   nextTick(() => {
-    if (unref(rowHoverBgColor)) {
+    if (rowHoverBgColor) {
       getTableDoms().tableWrapper.style.setProperty(
         "--el-table-row-hover-bg-color",
-        unref(rowHoverBgColor),
+        rowHoverBgColor,
         "important"
       );
     }
 
-    if (unref(adaptive)) {
+    if (adaptive) {
       setAdaptive();
       window.addEventListener("resize", debounceSetAdaptive);
-      const hasFixHeader = Reflect.has(unref(adaptiveConfig), "fixHeader");
-      if (hasFixHeader && !unref(adaptiveConfig).fixHeader) {
+      const hasFixHeader = Reflect.has(adaptiveConfig, "fixHeader");
+      if (hasFixHeader && !adaptiveConfig.fixHeader) {
         return;
       } else {
-        setHeaderSticky(unref(adaptiveConfig).zIndex ?? 3);
+        setHeaderSticky(adaptiveConfig.zIndex ?? 3);
       }
     }
   });
@@ -269,7 +259,7 @@ onMounted(() => {
 
 // 组件卸载前
 onBeforeUnmount(() => {
-  if (unref(adaptive)) {
+  if (adaptive) {
     window.removeEventListener("resize", debounceSetAdaptive);
   }
 });
@@ -468,5 +458,12 @@ defineExpose({
 <style scoped>
 .pure-table {
   width: 100%;
+}
+
+.pure-pagination {
+  width: 100%;
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
