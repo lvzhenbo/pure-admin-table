@@ -16,7 +16,7 @@ import type {
   CellCls,
   Sort
 } from "element-plus";
-import type { VNode } from "vue";
+import type { VNode, CSSProperties } from "vue";
 import type { TableOverflowTooltipOptions } from "element-plus/es/components/table/src/util";
 
 /**
@@ -169,4 +169,8 @@ export interface PureTableProps extends TableProps {
   adaptive?: boolean;
   /** 撑满内容区自适应高度相关配置 */
   adaptiveConfig?: AdaptiveConfig;
+  /** 表格的自定义类名（替代透传的 class） */
+  tableClass?: string;
+  /** 表格的自定义样式（替代透传的 style） */
+  tableStyle?: CSSProperties;
 }
