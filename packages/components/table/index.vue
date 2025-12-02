@@ -157,7 +157,7 @@ const emit = defineEmits<{
     data: { column: TableColumnCtx<T>; prop: string; order: string | null }
   ];
   /** 当表格的筛选条件发生变化的时候会触发该事件 */
-  "filter-change": [filters: Record<string, string[]>];
+  "filter-change": [filters: Record<string, unknown[]>];
   /** 当表格的当前行发生变化的时候会触发该事件 */
   "current-change": [currentRow: T | undefined, oldCurrentRow: T | undefined];
   /** 当拖动表头改变了列的宽度的时候会触发该事件 */
