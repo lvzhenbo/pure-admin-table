@@ -9,7 +9,7 @@ import {
   TableColumns,
   TableColumn
 } from "./table-column";
-import { TableProps, PureTableProps, AdaptiveConfig } from "./table-props";
+import { PureTableProps, AdaptiveConfig } from "./table-props";
 import { PaginationProps } from "./pagination";
 
 type Size = "large" | "default" | "small";
@@ -30,7 +30,6 @@ export type {
   AdaptiveConfig,
   TableColumns,
   TableColumn,
-  TableProps,
   Layout,
   Effect,
   Align,

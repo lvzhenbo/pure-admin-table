@@ -22,10 +22,7 @@ import Renderer from "../renderer.vue";
 import {
   type PureTableProps,
   type TableColumns,
-  type PaginationProps,
-  type AdaptiveConfig,
-  type Align,
-  type Size
+  type AdaptiveConfig
 } from "../../types";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
@@ -33,9 +30,8 @@ import type { TableColumnCtx } from "element-plus";
 
 /**
  * @description 使用 withDefaults 为 props 添加默认值
- * 使用 Partial<PureTableProps> 使所有属性变为可选，以便在组件中使用默认值
  */
-const props = withDefaults(defineProps<Partial<PureTableProps>>(), {
+const props = withDefaults(defineProps<PureTableProps>(), {
   // PureTable 自定义属性默认值
   columns: () => [],
   alignWhole: "left",

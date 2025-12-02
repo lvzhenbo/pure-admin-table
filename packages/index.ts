@@ -28,7 +28,6 @@ export type {
   AdaptiveConfig,
   TableColumns,
   TableColumn,
-  TableProps,
   Layout,
   Effect,
   Align,
