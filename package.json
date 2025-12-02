@@ -93,11 +93,6 @@
       "ignoreMissing": [
         "webpack"
       ]
-    },
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "esbuild",
-      "vue-demi"
-    ]
+    }
   }
 }
