@@ -30,10 +30,15 @@ export interface TableColumnScope {
   $index: number;
 }
 
+/**
+ * @description 单元格渲染器和表头渲染器的参数类型
+ * 不再包含 attrs 属性，因为已取消透传机制
+ */
 export interface TableColumnRenderer extends TableColumnScope {
+  /** 行索引 */
   index: number;
+  /** 组件的 props */
   props: PureTableProps;
-  attrs: any;
 }
 
 /**
