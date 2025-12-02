@@ -1,4 +1,10 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+  generic="
+    T extends Record<PropertyKey, unknown> = Record<PropertyKey, unknown>
+  "
+>
 /**
  * PureTable 组件
  * 二次封装 Element Plus Table 组件，提供更灵活的配置
@@ -8,6 +14,7 @@
  * 2. 将 props 一个一个显式添加到对应的组件上
  * 3. 将事件也一个一个显式添加到对应组件上
  * 4. 需要透传的样式改成 props，如 tableClass 和 tableStyle
+ * 5. 使用泛型组件，支持类型推断
  */
 import {
   ref,
@@ -21,169 +28,17 @@ import {
 import Renderer from "../renderer.vue";
 import {
   type PureTableProps,
-  type TableColumnScope,
   type TableColumns,
-  type PaginationProps,
-  type AdaptiveConfig,
-  type Align,
-  type Size
+  type AdaptiveConfig
 } from "../../types";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
-import type {
-  TableColumnCtx,
-  SummaryMethod,
-  ColumnStyle,
-  ColumnCls,
-  CellStyle,
-  TreeNode,
-  CellCls,
-  Sort
-} from "element-plus";
-import type { TableOverflowTooltipOptions } from "element-plus/es/components/table/src/util";
-import type { VNode, Component } from "vue";
-
-type DefaultRow = Record<PropertyKey, any>;
-
-/**
- * @description 定义组件的 props 接口
- * 不再继承 Element Plus Table 的 props 类型，而是显式定义每个属性
- */
-export interface PureTableComponentProps<T extends DefaultRow = DefaultRow> {
-  // ==================== PureTable 自定义属性 ====================
-  /** 列配置 */
-  columns?: Array<TableColumns>;
-  /** 整体对齐方式 */
-  alignWhole?: Align;
-  /** 表头对齐方式，若不设置该项，则使用表格的对齐方式 */
-  headerAlign?: Align;
-  /** 当内容过长被隐藏时显示 tooltip */
-  showOverflowTooltip?: boolean;
-  /** 鼠标经过行时，行的背景色 */
-  rowHoverBgColor?: string;
-  /** 分页相关配置 */
-  pagination?: Partial<PaginationProps>;
-  /** 表格是否撑满内容区自适应高度 */
-  adaptive?: boolean;
-  /** 撑满内容区自适应高度相关配置 */
-  adaptiveConfig?: AdaptiveConfig;
-  /** 表格的自定义类名（替代透传的 class） */
-  tableClass?: string;
-  /** 表格的自定义样式（替代透传的 style） */
-  tableStyle?: CSSProperties;
-
-  // ==================== Element Plus Table 属性 ====================
-  /** 显示的数据 */
-  data?: Array<T>;
-  /** Table 的高度 */
-  height?: string | number;
-  /** Table 的最大高度 */
-  maxHeight?: string | number;
-  /** 是否为斑马纹 table */
-  stripe?: boolean;
-  /** 是否带有纵向边框 */
-  border?: boolean;
-  /** Table 的尺寸 */
-  size?: Size;
-  /** 列的宽度是否自撑开 */
-  fit?: boolean;
-  /** 是否显示表头 */
-  showHeader?: boolean;
-  /** 是否要高亮当前行 */
-  highlightCurrentRow?: boolean;
-  /** 当前行的 key，只写属性 */
-  currentRowKey?: string | number;
-  /** 行的 className 的回调方法 */
-  rowClassName?: ColumnCls<T>;
-  /** 行的 style 的回调方法 */
-  rowStyle?: ColumnStyle<T>;
-  /** 单元格的 className 的回调方法 */
-  cellClassName?: CellCls<T>;
-  /** 单元格的 style 的回调方法 */
-  cellStyle?: CellStyle<T>;
-  /** 表头行的 className 的回调方法 */
-  headerRowClassName?: ColumnCls<T>;
-  /** 表头行的 style 的回调方法 */
-  headerRowStyle?: ColumnStyle<T>;
-  /** 表头单元格的 className 的回调方法 */
-  headerCellClassName?: CellCls<T>;
-  /** 表头单元格的 style 的回调方法 */
-  headerCellStyle?: CellStyle<T>;
-  /** 行数据的 Key */
-  rowKey?: string | ((row: T) => string);
-  /** 空数据时显示的文本内容 */
-  emptyText?: string;
-  /** 是否默认展开所有行 */
-  defaultExpandAll?: boolean;
-  /** 可以通过该属性设置 Table 目前的展开行 */
-  expandRowKeys?: any[];
-  /** 默认的排序列的 prop 和顺序 */
-  defaultSort?: Sort;
-  /** tooltip effect 属性 */
-  tooltipEffect?: "dark" | "light";
-  /** 溢出 tooltip 的选项 */
-  tooltipOptions?: TableOverflowTooltipOptions;
-  /** 挂载到哪个 DOM 元素 */
-  appendFilterPanelTo?: string;
-  /** 是否在表尾显示合计行 */
-  showSummary?: boolean;
-  /** 合计行第一列的文本 */
-  sumText?: string;
-  /** 自定义的合计计算方法 */
-  summaryMethod?: SummaryMethod<T>;
-  /** 合并行或列的计算方法 */
-  spanMethod?: (data: {
-    row: T;
-    rowIndex: number;
-    column: TableColumnCtx<T>;
-    columnIndex: number;
-  }) =>
-    | number[]
-    | {
-        rowspan: number;
-        colspan: number;
-      }
-    | undefined;
-  /** 在多选表格中，当仅有部分行被选中时，点击表头的多选框时的行为 */
-  selectOnIndeterminate?: boolean;
-  /** 展示树形数据时，树节点的缩进 */
-  indent?: number;
-  /** 是否懒加载子节点数据 */
-  lazy?: boolean;
-  /** 加载子节点数据的函数 */
-  load?: (row: T, treeNode: TreeNode, resolve: (data: T[]) => void) => void;
-  /** 渲染嵌套数据的配置选项 */
-  treeProps?: {
-    hasChildren?: string;
-    children?: string;
-    checkStrictly?: boolean;
-  };
-  /** 设置表格单元、行和列的布局方式 */
-  tableLayout?: "fixed" | "auto";
-  /** 总是显示滚动条 */
-  scrollbarAlwaysOn?: boolean;
-  /** 确保主轴的最小尺寸 */
-  flexible?: boolean;
-  /** body 的滚动条的包裹容器 tabindex */
-  scrollbarTabindex?: string | number;
-  /** 是否允许拖动最后一列 */
-  allowDragLastColumn?: boolean;
-  /** 自定义 show-overflow-tooltip 时的 tooltip 内容 */
-  tooltipFormatter?: (data: {
-    row: T;
-    column: any;
-    cellValue: any;
-  }) => VNode | string;
-  /** 在折叠后是否在 DOM 中保留展开行内容 */
-  preserveExpandedContent?: boolean;
-  /** 是否使用原生滚动条 */
-  nativeScrollbar?: boolean;
-}
+import type { TableColumnCtx } from "element-plus";
 
 /**
  * @description 使用 withDefaults 为 props 添加默认值
  */
-const props = withDefaults(defineProps<PureTableComponentProps>(), {
+const props = withDefaults(defineProps<PureTableProps<T>>(), {
   // PureTable 自定义属性默认值
   columns: () => [],
   alignWhole: "left",
@@ -247,77 +102,73 @@ const emit = defineEmits<{
 
   // ==================== Element Plus Table 事件 ====================
   /** 当用户手动勾选数据行的 Checkbox 时触发的事件 */
-  select: [selection: any[], row: any];
+  select: [selection: T[], row: T];
   /** 当用户手动勾选全选 Checkbox 时触发的事件 */
-  "select-all": [selection: any[]];
+  "select-all": [selection: T[]];
   /** 当选择项发生变化时会触发该事件 */
-  "selection-change": [selection: any[]];
+  "selection-change": [selection: T[]];
   /** 当单元格 hover 进入时会触发该事件 */
   "cell-mouse-enter": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: MouseEvent
   ];
   /** 当单元格 hover 退出时会触发该事件 */
   "cell-mouse-leave": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: MouseEvent
   ];
   /** 当某个单元格被点击时会触发该事件 */
   "cell-click": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某个单元格被双击击时会触发该事件 */
   "cell-dblclick": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某个单元格被鼠标右键点击时会触发该事件 */
   "cell-contextmenu": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某一行被点击时会触发该事件 */
-  "row-click": [row: any, column: TableColumnCtx<any>, event: PointerEvent];
+  "row-click": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一行被鼠标右键点击时会触发该事件 */
-  "row-contextmenu": [
-    row: any,
-    column: TableColumnCtx<any>,
-    event: PointerEvent
-  ];
+  "row-contextmenu": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一行被双击时会触发该事件 */
-  "row-dblclick": [row: any, column: TableColumnCtx<any>, event: PointerEvent];
+  "row-dblclick": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一列的表头被点击时会触发该事件 */
-  "header-click": [column: TableColumnCtx<any>, event: PointerEvent];
+  "header-click": [column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一列的表头被鼠标右键点击时触发该事件 */
-  "header-contextmenu": [column: TableColumnCtx<any>, event: PointerEvent];
+  "header-contextmenu": [column: TableColumnCtx<T>, event: PointerEvent];
   /** 当表格的排序条件发生变化的时候会触发该事件 */
   "sort-change": [
-    data: { column: TableColumnCtx<any>; prop: string; order: string | null }
+    data: { column: TableColumnCtx<T>; prop: string; order: string | null }
   ];
   /** 当表格的筛选条件发生变化的时候会触发该事件 */
-  "filter-change": [filters: Record<string, any[]>];
+  "filter-change": [filters: Record<string, unknown[]>];
   /** 当表格的当前行发生变化的时候会触发该事件 */
-  "current-change": [currentRow: any, oldCurrentRow: any];
+  "current-change": [currentRow: T | undefined, oldCurrentRow: T | undefined];
   /** 当拖动表头改变了列的宽度的时候会触发该事件 */
   "header-dragend": [
     newWidth: number,
     oldWidth: number,
-    column: TableColumnCtx<any>,
+    column: TableColumnCtx<T>,
     event: MouseEvent
   ];
   /** 当用户对某一行展开或者关闭的时候会触发该事件 */
-  "expand-change": [row: any, expandedRows: any[] | boolean];
+  "expand-change": [row: T, expandedRows: T[] | boolean];
 }>();
 
 const isClient = ref(false);
@@ -530,23 +381,52 @@ defineExpose({
       :class="props.tableClass"
       :style="props.tableStyle"
       @select="(selection, row) => emit('select', selection, row)"
-      @select-all="(selection) => emit('select-all', selection)"
-      @selection-change="(selection) => emit('selection-change', selection)"
-      @cell-mouse-enter="(row, column, cell, event) => emit('cell-mouse-enter', row, column, cell, event)"
-      @cell-mouse-leave="(row, column, cell, event) => emit('cell-mouse-leave', row, column, cell, event)"
-      @cell-click="(row, column, cell, event) => emit('cell-click', row, column, cell, event)"
-      @cell-dblclick="(row, column, cell, event) => emit('cell-dblclick', row, column, cell, event)"
-      @cell-contextmenu="(row, column, cell, event) => emit('cell-contextmenu', row, column, cell, event)"
+      @select-all="selection => emit('select-all', selection)"
+      @selection-change="selection => emit('selection-change', selection)"
+      @cell-mouse-enter="
+        (row, column, cell, event) =>
+          emit('cell-mouse-enter', row, column, cell, event)
+      "
+      @cell-mouse-leave="
+        (row, column, cell, event) =>
+          emit('cell-mouse-leave', row, column, cell, event)
+      "
+      @cell-click="
+        (row, column, cell, event) =>
+          emit('cell-click', row, column, cell, event)
+      "
+      @cell-dblclick="
+        (row, column, cell, event) =>
+          emit('cell-dblclick', row, column, cell, event)
+      "
+      @cell-contextmenu="
+        (row, column, cell, event) =>
+          emit('cell-contextmenu', row, column, cell, event)
+      "
       @row-click="(row, column, event) => emit('row-click', row, column, event)"
-      @row-contextmenu="(row, column, event) => emit('row-contextmenu', row, column, event)"
-      @row-dblclick="(row, column, event) => emit('row-dblclick', row, column, event)"
+      @row-contextmenu="
+        (row, column, event) => emit('row-contextmenu', row, column, event)
+      "
+      @row-dblclick="
+        (row, column, event) => emit('row-dblclick', row, column, event)
+      "
       @header-click="(column, event) => emit('header-click', column, event)"
-      @header-contextmenu="(column, event) => emit('header-contextmenu', column, event)"
-      @sort-change="(data) => emit('sort-change', data)"
-      @filter-change="(filters) => emit('filter-change', filters)"
-      @current-change="(currentRow, oldCurrentRow) => emit('current-change', currentRow, oldCurrentRow)"
-      @header-dragend="(newWidth, oldWidth, column, event) => emit('header-dragend', newWidth, oldWidth, column, event)"
-      @expand-change="(row, expandedRows) => emit('expand-change', row, expandedRows)"
+      @header-contextmenu="
+        (column, event) => emit('header-contextmenu', column, event)
+      "
+      @sort-change="data => emit('sort-change', data)"
+      @filter-change="filters => emit('filter-change', filters)"
+      @current-change="
+        (currentRow, oldCurrentRow) =>
+          emit('current-change', currentRow, oldCurrentRow)
+      "
+      @header-dragend="
+        (newWidth, oldWidth, column, event) =>
+          emit('header-dragend', newWidth, oldWidth, column, event)
+      "
+      @expand-change="
+        (row, expandedRows) => emit('expand-change', row, expandedRows)
+      "
     >
       <!-- 动态渲染列 -->
       <template v-for="(column, index) in columns" :key="index">
