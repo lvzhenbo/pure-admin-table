@@ -701,9 +701,8 @@ defineExpose({
     <!-- 分页：显式绑定每个 prop 和事件，不使用透传 -->
     <ElPagination
       v-if="conditions"
-      class="pure-pagination"
+      :class="['pure-pagination', pagination?.class]"
       :style="getStyle"
-      :class="pagination?.class"
       :size="pagination?.size"
       :background="pagination?.background"
       :page-size="pagination?.pageSize"
