@@ -3,6 +3,11 @@ import type { TableProps as ElTableProps } from "element-plus";
 import type { CSSProperties } from "vue";
 
 /**
+ * @description 默认行数据类型
+ */
+export type DefaultRow = Record<PropertyKey, unknown>;
+
+/**
  * @description 撑满内容区自适应高度相关配置
  */
 export type AdaptiveConfig = {
@@ -19,8 +24,10 @@ export type AdaptiveConfig = {
 /**
  * @description 拓展 `element-plus` 的 `Table` 属性
  * @see {@link https://element-plus.org/zh-CN/component/table.html#table-%E5%B1%9E%E6%80%A7}
+ * @template T 表格数据行类型，默认为 `DefaultRow`
  */
-export interface PureTableProps extends ElTableProps<any> {
+export interface PureTableProps<T extends DefaultRow = DefaultRow>
+  extends ElTableProps<T> {
   /** 唯一键，如果单个页面有多个表格实例，但是您只获取到一个表格实例，设置 `tableKey` 即可解决，不过大多数情况下不需要设置，会自动处理 */
   tableKey?: string | number;
   /** `Table-column` 配置 */

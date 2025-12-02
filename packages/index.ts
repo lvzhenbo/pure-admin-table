@@ -5,7 +5,7 @@ import "element-plus/es/components/table/style/css";
 import "element-plus/es/components/pagination/style/css";
 
 // 为 Vue 组件添加名称
-Table.name = "PureTable";
+(Table as { name: string }).name = "PureTable";
 
 export const PureTable = Object.assign(Table, {
   install: (app: App) => {
@@ -28,6 +28,7 @@ export type {
   AdaptiveConfig,
   TableColumns,
   TableColumn,
+  DefaultRow,
   Layout,
   Effect,
   Align,

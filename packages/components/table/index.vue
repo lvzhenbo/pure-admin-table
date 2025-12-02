@@ -1,4 +1,10 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+  generic="
+    T extends Record<PropertyKey, unknown> = Record<PropertyKey, unknown>
+  "
+>
 /**
  * PureTable 组件
  * 二次封装 Element Plus Table 组件，提供更灵活的配置
@@ -8,6 +14,7 @@
  * 2. 将 props 一个一个显式添加到对应的组件上
  * 3. 将事件也一个一个显式添加到对应组件上
  * 4. 需要透传的样式改成 props，如 tableClass 和 tableStyle
+ * 5. 使用泛型组件，支持类型推断
  */
 import {
   ref,
@@ -31,7 +38,7 @@ import type { TableColumnCtx } from "element-plus";
 /**
  * @description 使用 withDefaults 为 props 添加默认值
  */
-const props = withDefaults(defineProps<PureTableProps>(), {
+const props = withDefaults(defineProps<PureTableProps<T>>(), {
   // PureTable 自定义属性默认值
   columns: () => [],
   alignWhole: "left",
@@ -95,77 +102,73 @@ const emit = defineEmits<{
 
   // ==================== Element Plus Table 事件 ====================
   /** 当用户手动勾选数据行的 Checkbox 时触发的事件 */
-  select: [selection: any[], row: any];
+  select: [selection: T[], row: T];
   /** 当用户手动勾选全选 Checkbox 时触发的事件 */
-  "select-all": [selection: any[]];
+  "select-all": [selection: T[]];
   /** 当选择项发生变化时会触发该事件 */
-  "selection-change": [selection: any[]];
+  "selection-change": [selection: T[]];
   /** 当单元格 hover 进入时会触发该事件 */
   "cell-mouse-enter": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: MouseEvent
   ];
   /** 当单元格 hover 退出时会触发该事件 */
   "cell-mouse-leave": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: MouseEvent
   ];
   /** 当某个单元格被点击时会触发该事件 */
   "cell-click": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某个单元格被双击击时会触发该事件 */
   "cell-dblclick": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某个单元格被鼠标右键点击时会触发该事件 */
   "cell-contextmenu": [
-    row: any,
-    column: TableColumnCtx<any>,
+    row: T,
+    column: TableColumnCtx<T>,
     cell: HTMLTableCellElement,
     event: PointerEvent
   ];
   /** 当某一行被点击时会触发该事件 */
-  "row-click": [row: any, column: TableColumnCtx<any>, event: PointerEvent];
+  "row-click": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一行被鼠标右键点击时会触发该事件 */
-  "row-contextmenu": [
-    row: any,
-    column: TableColumnCtx<any>,
-    event: PointerEvent
-  ];
+  "row-contextmenu": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一行被双击时会触发该事件 */
-  "row-dblclick": [row: any, column: TableColumnCtx<any>, event: PointerEvent];
+  "row-dblclick": [row: T, column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一列的表头被点击时会触发该事件 */
-  "header-click": [column: TableColumnCtx<any>, event: PointerEvent];
+  "header-click": [column: TableColumnCtx<T>, event: PointerEvent];
   /** 当某一列的表头被鼠标右键点击时触发该事件 */
-  "header-contextmenu": [column: TableColumnCtx<any>, event: PointerEvent];
+  "header-contextmenu": [column: TableColumnCtx<T>, event: PointerEvent];
   /** 当表格的排序条件发生变化的时候会触发该事件 */
   "sort-change": [
-    data: { column: TableColumnCtx<any>; prop: string; order: string | null }
+    data: { column: TableColumnCtx<T>; prop: string; order: string | null }
   ];
   /** 当表格的筛选条件发生变化的时候会触发该事件 */
-  "filter-change": [filters: Record<string, any[]>];
+  "filter-change": [filters: Record<string, string[]>];
   /** 当表格的当前行发生变化的时候会触发该事件 */
-  "current-change": [currentRow: any, oldCurrentRow: any];
+  "current-change": [currentRow: T | undefined, oldCurrentRow: T | undefined];
   /** 当拖动表头改变了列的宽度的时候会触发该事件 */
   "header-dragend": [
     newWidth: number,
     oldWidth: number,
-    column: TableColumnCtx<any>,
+    column: TableColumnCtx<T>,
     event: MouseEvent
   ];
   /** 当用户对某一行展开或者关闭的时候会触发该事件 */
-  "expand-change": [row: any, expandedRows: any[] | boolean];
+  "expand-change": [row: T, expandedRows: T[] | boolean];
 }>();
 
 const isClient = ref(false);
