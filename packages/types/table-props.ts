@@ -123,6 +123,7 @@ export type TableProps = {
   treeProps?: {
     hasChildren?: string;
     children?: string;
+    checkStrictly?: boolean;
   };
   // className?: string;
   // style?: CSSProperties;
@@ -144,6 +145,8 @@ export type TableProps = {
   }) => VNode | string;
   /** 在折叠后是否在 `DOM` 中保留展开行内容，默认值为 `false` */
   preserveExpandedContent?: boolean;
+  /** 是否使用原生滚动条，默认值为 `false` */
+  nativeScrollbar?: boolean;
 };
 
 /**
