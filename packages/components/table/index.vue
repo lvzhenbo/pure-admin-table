@@ -35,6 +35,10 @@ import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 import { isFunction, isBoolean, debounce } from "@pureadmin/utils";
 import type { TableColumnCtx } from "element-plus";
 
+defineOptions({
+  name: "PureTable"
+});
+
 /**
  * @description 使用 withDefaults 为 props 添加默认值
  */
