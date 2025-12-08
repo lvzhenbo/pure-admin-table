@@ -2,12 +2,7 @@ import type { TableProps as ElTableProps } from "element-plus";
 import type { CSSProperties } from "vue";
 import type { PaginationProps } from "./pagination";
 import type { TableColumns } from "./table-column";
-
-/**
- * 基础类型定义
- */
-type Align = "left" | "center" | "right";
-type DefaultRow = Record<PropertyKey, unknown>;
+import type { Align, DefaultRow } from "./base";
 
 /**
  * @description 撑满内容区自适应高度相关配置

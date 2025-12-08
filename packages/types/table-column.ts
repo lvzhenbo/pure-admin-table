@@ -1,11 +1,7 @@
 import type { TableColumnCtx } from "element-plus";
 import type { VNode } from "vue";
 import type { PureTableProps } from "./table-props";
-
-/**
- * 基础类型定义
- */
-type Align = "left" | "center" | "right";
+import type { Align } from "./base";
 
 /**
  * 表格列相关类型定义

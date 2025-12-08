@@ -1,11 +1,7 @@
 /**
- * 公共基础类型
+ * 导出基础类型
  */
-export type Size = "large" | "default" | "small";
-export type Align = "left" | "center" | "right";
-export type Effect = "dark" | "light";
-export type Layout = "fixed" | "auto";
-export type DefaultRow = Record<PropertyKey, unknown>;
+export type { Size, Align, Effect, Layout, DefaultRow } from "./base";
 
 /**
  * 导出分页相关类型

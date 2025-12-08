@@ -50,7 +50,13 @@ export default defineConfig({
             output: {
               exports: "named",
               preserveModules: false,
-              assetFileNames: "[name].[ext]"
+              assetFileNames: assetInfo => {
+                // 将 CSS 文件统一命名为 style.css
+                if (assetInfo.name?.endsWith(".css")) {
+                  return "style.css";
+                }
+                return "[name].[ext]";
+              }
             }
           },
           minify: "esbuild",
