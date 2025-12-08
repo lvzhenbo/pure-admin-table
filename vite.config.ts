@@ -17,17 +17,8 @@ export default defineConfig({
       ? [
           dts({
             include: ["packages/**/*"],
-            exclude: ["src", "node_modules"],
-            outDir: "dist",
-            staticImport: true,
             rollupTypes: false,
-            insertTypesEntry: true,
-            logLevel: "silent",
-            compilerOptions: {
-              declaration: true,
-              declarationMap: false,
-              skipLibCheck: true
-            }
+            logLevel: "silent"
           })
         ]
       : [])
@@ -54,8 +45,6 @@ export default defineConfig({
           rollupOptions: {
             external: ["vue", "element-plus"],
             output: {
-              exports: "named",
-              preserveModules: false,
               assetFileNames: assetInfo => {
                 // 将 CSS 文件统一命名为 style.css
                 if (assetInfo.name?.endsWith(".css")) {
@@ -65,8 +54,7 @@ export default defineConfig({
               }
             }
           },
-          minify: false,
-          cssMinify: false
+          minify: false
         }
       }
     : {
