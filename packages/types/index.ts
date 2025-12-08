@@ -1,4 +1,21 @@
-import {
+/**
+ * 公共基础类型
+ */
+export type Size = "large" | "default" | "small";
+export type Align = "left" | "center" | "right";
+export type Effect = "dark" | "light";
+export type Layout = "fixed" | "auto";
+export type DefaultRow = Record<PropertyKey, unknown>;
+
+/**
+ * 导出分页相关类型
+ */
+export type { PaginationProps } from "./pagination";
+
+/**
+ * 导出表格列相关类型
+ */
+export type {
   TableColumnFilterPlacement,
   TableColumnSortOrders,
   TableColumnSortable,
@@ -9,30 +26,8 @@ import {
   TableColumns,
   TableColumn
 } from "./table-column";
-import { PureTableProps, AdaptiveConfig, DefaultRow } from "./table-props";
-import { PaginationProps } from "./pagination";
 
-type Size = "large" | "default" | "small";
-type Align = "left" | "center" | "right";
-type Effect = "dark" | "light";
-type Layout = "fixed" | "auto";
-
-export type {
-  TableColumnFilterPlacement,
-  TableColumnSortOrders,
-  TableColumnSortable,
-  TableColumnRenderer,
-  TableColumnScope,
-  TableColumnFixed,
-  TableColumnType,
-  PaginationProps,
-  PureTableProps,
-  AdaptiveConfig,
-  TableColumns,
-  TableColumn,
-  DefaultRow,
-  Layout,
-  Effect,
-  Align,
-  Size
-};
+/**
+ * 导出表格属性相关类型
+ */
+export type { PureTableProps, AdaptiveConfig } from "./table-props";

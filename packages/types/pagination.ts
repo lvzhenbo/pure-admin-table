@@ -1,5 +1,10 @@
 import type { CSSProperties } from "vue";
-import { Align, Size } from "./index";
+
+/**
+ * 基础类型定义
+ */
+type Size = "large" | "default" | "small";
+type Align = "left" | "center" | "right";
 
 /**
  * @description 分页相关配置。注意：`pageSize`、`total`、`currentPage` 这三个属性必传

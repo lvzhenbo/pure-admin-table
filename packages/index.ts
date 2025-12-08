@@ -1,10 +1,16 @@
-import type { App } from "vue";
+import type { App, Component } from "vue";
 import Table from "./components/table/index.vue";
 
 import "element-plus/es/components/table/style/css";
 import "element-plus/es/components/pagination/style/css";
 
-export const PureTable = Object.assign(Table, {
+/**
+ * PureTable 组件导出
+ * 支持作为 Vue 组件使用，也支持通过 install 方法全局注册
+ */
+export const PureTable: Component & {
+  install: (app: App) => void;
+} = Object.assign(Table, {
   install: (app: App) => {
     app.component("PureTable", Table);
   }

@@ -1,27 +1,15 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "packages",
     "outDir": "dist",
-    "target": "ESNext",
-    "module": "ESNext",
-    "jsx": "preserve",
-    "moduleResolution": "bundler",
     "declaration": true,
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
-    "skipLibCheck": true,
-    "isolatedModules": true,
     "emitDeclarationOnly": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "noEmit": false,
+    "strictNullChecks": false
   },
-  "include": [
-    "packages/**/**/*",
-    "packages/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules", "dist", "src", "**/*.vue"]
 }

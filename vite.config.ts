@@ -1,13 +1,42 @@
 import { resolve } from "node:path";
+import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import svgLoader from "vite-svg-loader";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { defineConfig, type UserConfig } from "vite";
+import svgLoader from "vite-svg-loader";
+import dts from "vite-plugin-dts";
 
-const lifecycle = process.env.npm_lifecycle_event;
+const isLibMode = process.env.npm_lifecycle_event === "lib";
 
-function getConfigs(): UserConfig {
-  return lifecycle === "lib"
+// https://cn.vitejs.dev/guide/build.html#library-mode
+export default defineConfig({
+  plugins: [
+    vue(),
+    vueJsx(),
+    svgLoader(),
+    ...(isLibMode
+      ? [
+          dts({
+            include: ["packages/**/*"],
+            exclude: ["src", "node_modules"],
+            outDir: "dist",
+            staticImport: true,
+            rollupTypes: true,
+            insertTypesEntry: true
+          })
+        ]
+      : [])
+  ],
+
+  define: {
+    "process.env.NODE_ENV": '"production"',
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
+  },
+
+  server: {
+    host: "0.0.0.0"
+  },
+
+  ...(isLibMode
     ? {
         publicDir: false,
         build: {
@@ -16,35 +45,23 @@ function getConfigs(): UserConfig {
             formats: ["es"],
             fileName: () => "index.js"
           },
-          // https://rollupjs.org/guide/en/#big-list-of-options
           rollupOptions: {
-            treeshake: true,
             external: ["vue", "element-plus"],
             output: {
-              exports: "named"
+              exports: "named",
+              preserveModules: false,
+              assetFileNames: "[name].[ext]"
             }
-          }
+          },
+          minify: "esbuild",
+          cssMinify: true
         }
       }
-    : ({
+    : {
         base: "/pure-admin-table/",
         build: {
           sourcemap: false,
           chunkSizeWarningLimit: 4000
         }
-      } as any);
-}
-
-// https://cn.vitejs.dev/guide/build.html#library-mode
-export default defineConfig({
-  plugins: [vue(), vueJsx(), svgLoader()],
-  // https://cn.vitejs.dev/guide/build.html#library-mode 环境变量
-  define: {
-    "process.env.NODE_ENV": '"production"',
-    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false
-  },
-  server: {
-    host: "0.0.0.0"
-  },
-  ...getConfigs()
+      })
 });
