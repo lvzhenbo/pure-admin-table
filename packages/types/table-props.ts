@@ -26,10 +26,9 @@ export type AdaptiveConfig = {
  * @see {@link https://element-plus.org/zh-CN/component/table.html#table-%E5%B1%9E%E6%80%A7}
  * @template T 表格数据行类型，默认为 `DefaultRow`
  */
-export interface PureTableProps<T extends DefaultRow = DefaultRow>
-  extends ElTableProps<T> {
-  /** 唯一键，如果单个页面有多个表格实例，但是您只获取到一个表格实例，设置 `tableKey` 即可解决，不过大多数情况下不需要设置，会自动处理 */
-  tableKey?: string | number;
+export interface PureTableProps<
+  T extends DefaultRow = DefaultRow
+> extends ElTableProps<T> {
   /** `Table-column` 配置 */
   columns?: Array<TableColumns>;
   /** 对齐方式，默认值 `left` */
