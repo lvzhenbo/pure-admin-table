@@ -1,7 +1,11 @@
 import type { TableColumnCtx } from "element-plus";
-import { PureTableProps, Align } from "./index";
 import type { VNode } from "vue";
+import type { PureTableProps } from "./table-props";
+import type { Align } from "./base";
 
+/**
+ * 表格列相关类型定义
+ */
 export type TableColumnSortOrders = "ascending" | "descending" | null;
 export type TableColumnType = "selection" | "index" | "expand";
 export type TableColumnSortable = false | true | "custom";
@@ -20,7 +24,11 @@ export type TableColumnFilterPlacement =
   | "right-end"
   | "right";
 
-type FilterMethods = (value, row: any, column: TableColumnCtx<any>) => void;
+type FilterMethods = (
+  value: any,
+  row: any,
+  column: TableColumnCtx<any>
+) => void;
 
 type RH = { column: TableColumnCtx<any>; $index: number };
 
@@ -78,7 +86,7 @@ export type TableColumn = {
   formatter?: (
     row: any,
     column: TableColumnCtx<any>,
-    cellValue,
+    cellValue: any,
     index: number
   ) => VNode | string;
   /** 当内容过长被隐藏时显示 `tooltip`，默认值为 `false` */

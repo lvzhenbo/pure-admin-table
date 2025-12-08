@@ -1,11 +1,8 @@
-import { PaginationProps, TableColumns, Align } from "./index";
 import type { TableProps as ElTableProps } from "element-plus";
 import type { CSSProperties } from "vue";
-
-/**
- * @description 默认行数据类型
- */
-export type DefaultRow = Record<PropertyKey, unknown>;
+import type { PaginationProps } from "./pagination";
+import type { TableColumns } from "./table-column";
+import type { Align, DefaultRow } from "./base";
 
 /**
  * @description 撑满内容区自适应高度相关配置
