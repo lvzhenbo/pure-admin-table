@@ -82,6 +82,3 @@ dist
 docs
 
 .DS_Store
-
-# Package lock files
-package-lock.json
