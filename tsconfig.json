@@ -14,7 +14,6 @@
     "types": [
       "node",
       "vite/client",
-      "vitest/globals",
       "element-plus/global"
     ],
   },
@@ -25,7 +24,6 @@
     "src/*.tsx",
     "src/*.vue",
     "vite.config.ts",
-    "__tests__/*",
     "volar.d.ts",
   ],
   "exclude": [
