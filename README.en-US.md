@@ -69,22 +69,6 @@ const app = createApp(App);
 app.use(PureTable).mount("#app");
 ```
 
-
-
-## 🔮 Volar support
-
-If you are using `Volar`, you can configure `compilerOptions.types` in `tsconfig.json` to specify the global component type (especially if you want to get type hints when registering globally, you need to add the following configuration)
-
-```js
-// tsconfig.json
-{
-  "compilerOptions": {
-    //...
-    "types": ["@pureadmin/table/volar"]
-  }
-}
-```
-
 ## License
 
 [MIT © 2022-present, pure-admin](./LICENSE)

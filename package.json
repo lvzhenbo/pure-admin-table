@@ -35,14 +35,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./volar": {
-      "types": "./volar.d.ts"
-    },
     "./*": "./*"
   },
   "files": [
-    "dist",
-    "volar.d.ts"
+    "dist"
   ],
   "style": "dist/style.css",
   "sideEffects": false,
