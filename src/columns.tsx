@@ -1,5 +1,5 @@
 import { dataMock } from "./mock";
-import { ElDivider } from "element-plus";
+import { ElDivider, type ComponentSize } from "element-plus";
 import { type Ref, h, ref, reactive, onMounted, watch } from "vue";
 import type { Align, TableColumns, PaginationProps } from "../packages";
 
@@ -85,7 +85,7 @@ export function useColumns(tableRef: Ref) {
   const spacer = h(ElDivider, { direction: "vertical" });
 
   const tableHeight = ref(687);
-  const tableSize = ref("default");
+  const tableSize = ref<ComponentSize>("default");
   const paginationAlign = ref("right");
 
   let dataList = ref<any>([]);

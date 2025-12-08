@@ -64,7 +64,7 @@ const {
 
   <PureTable
     ref="tableRef"
-    :size="tableSize as any"
+    :size="tableSize"
     :height="tableHeight"
     border
     row-key="id"
