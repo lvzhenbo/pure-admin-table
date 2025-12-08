@@ -4,12 +4,8 @@
     "rootDir": "packages",
     "outDir": "dist",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "noEmit": false,
-    "strictNullChecks": false
+    "emitDeclarationOnly": true
   },
   "include": ["packages/**/*"],
-  "exclude": ["node_modules", "dist", "src", "**/*.vue"]
+  "exclude": ["node_modules", "dist", "src"]
 }
