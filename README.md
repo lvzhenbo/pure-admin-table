@@ -69,7 +69,7 @@ const app = createApp(App);
 app.use(PureTable, { locale: "zhCn" }).mount("#app");
 ```
 
-[点击查看按需、全局、自定义命名空间、`nuxt3`以及`Html`文件引入的用法示例](https://github.com/pure-admin/pure-admin-table/tree/main/playgrounds)
+
 
 ## 🔮 `Volar`支持
 
