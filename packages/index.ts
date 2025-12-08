@@ -31,3 +31,10 @@ export type {
   Align,
   Size
 } from "./types";
+
+// 为Vue提供全局组件类型声明
+declare module "vue" {
+  export interface GlobalComponents {
+    PureTable: typeof import("@pureadmin/table")["PureTable"];
+  }
+}

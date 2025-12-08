@@ -69,22 +69,6 @@ const app = createApp(App);
 app.use(PureTable, { locale: "zhCn" }).mount("#app");
 ```
 
-
-
-## 🔮 `Volar`支持
-
-如果您在使用 `Volar`，那么可以在 `tsconfig.json` 中配置 `compilerOptions.types` 来指定全局组件类型（尤其是全局注册时要想获得类型提示就需要加上下面配置）
-
-```js
-// tsconfig.json
-{
-  "compilerOptions": {
-    // ...
-    "types": ["@pureadmin/table/volar"]
-  }
-}
-```
-
 ## 许可证
 
 [MIT © 2022-present, pure-admin](./LICENSE)
