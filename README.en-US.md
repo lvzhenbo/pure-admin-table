@@ -69,7 +69,7 @@ const app = createApp(App);
 app.use(PureTable).mount("#app");
 ```
 
-[Click to view usage examples introduced by on-demand, global, namespace, `nuxt3` and `Html` files](https://github.com/pure-admin/pure-admin-table/tree/main/playgrounds)
+
 
 ## 🔮 Volar support
 
