@@ -20,8 +20,14 @@ export default defineConfig({
             exclude: ["src", "node_modules"],
             outDir: "dist",
             staticImport: true,
-            rollupTypes: true,
-            insertTypesEntry: true
+            rollupTypes: false,
+            insertTypesEntry: true,
+            logLevel: "silent",
+            compilerOptions: {
+              declaration: true,
+              declarationMap: false,
+              skipLibCheck: true
+            }
           })
         ]
       : [])
@@ -59,8 +65,8 @@ export default defineConfig({
               }
             }
           },
-          minify: "esbuild",
-          cssMinify: true
+          minify: false,
+          cssMinify: false
         }
       }
     : {
